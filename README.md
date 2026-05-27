@@ -26,5 +26,8 @@ Code derivied from Boostrap is licensed for this project under an MIT License
 ### Viewer (MIT LICENSE)
 _/src/explore/..._
 
-### Website Photographs
-Unless otherwise stated, photographs are licensed from Amy Wells under a CC BY-SA 4.0 license.
+### VirtualSoils.ca Code 
+Code is available under an MIT License.
+
+### VirtualSoils.ca Media
+Unless otherwise stated, media is licensed under a CC BY-SA 4.0 License.
