@@ -1,0 +1,6 @@
+{
+    "release":["build\\release\\","s3://virtualsoils.ca/"],
+    "dev":["build\\release\\","s3://virtualsoils.ca/"],
+    "admin":["",""],
+    "logs":["",""]
+}

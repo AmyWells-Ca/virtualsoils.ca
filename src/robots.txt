@@ -1,0 +1,5 @@
+# Meow Meow
+# ᓚᘏᗢ
+Crawl-delay: 30
+User-agent: *
+Disallow: /cdn/

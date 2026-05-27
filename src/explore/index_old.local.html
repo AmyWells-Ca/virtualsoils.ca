@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+    <script src="../cdn/js/unifiedelements.js"></script>
+    <link rel="icon" type="image/x-icon" href="../cdn/media/brand/virtual-soils.jpg">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="../cdn/css/styles.css">
+    
+    <!-- Page Information -->
+    <title>The Web of Virtual Soils</title>
+    <script>
+        let docAuthor = "Amy Wells";
+        let lastUpdated = "April 13, 2026";
+        let pageLevel = 1;
+    </script>
+    <meta name = "keywords" content = "Amy Wells, Virtual Soils, 3d Gaussian Splatting, 3DGS, Soil Science">
+    <style>
+        body {
+            /* Background From Self */
+            background-image: url(../cdn/media/backgrounds/university-of-manitoba.jpg);
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="row align-content-middle p-3 mb-5 container-fluid overflow-hidden" id="pageHeader">Loading...</div>
+        <script> unifyHeader("pageHeader", pageLevel);</script>
+    </header>
+    <!-- Actual Page Content -->
+    <div class="container">
+        <!-- Map Title -->
+        <div class="row bk-prime">
+            <div class="col py-3">
+                <h1 style="margin:0rem; padding:0rem;">Web of Virtual Soils</h1>
+            </div>
+        </div>
+        <!-- Soil Map -->
+        <div class="row bk-white-a">
+            <div class="col py-3">
+                <div id="map" class="map">
+                    <img src="../cdn/media/figures/google-maps-preview_low.jpg" class="preview-image">
+                    <div class="preview-text">
+                        <btn class="btn btn-sec-hov" style="width: fit-content" onclick="initMap()">Load the Soils Map</btn>
+                    </div>
+                </div>                
+                <p style="font-size: small; padding-left:1rem; padding-top: 0.5rem;">Version 1.0</p>
+            </div>
+        </div>
+        <!-- Body Content -->
+        <div class="row bk-white-a">
+            <!-- Left Bar / Page Navigation -->
+            <div class="col-xs-12 col-sm-5 col-md-3">
+                <!---->
+                <div style="position:sticky; top: 10px;">
+                    <h2>Page Outline</h2>
+                    <a href="#map" class="btn btn-sec-hov">The Soils Map</a>
+                    <a href="#lbrary" class="btn btn-sec-hov">Virtual Soils Library</a>
+                    <h2>Reserved Space</h2>
+                    <p>
+                        In future, there will be funcionality here to filter the Virtual Soils Library by region, and soil type!
+                    </p>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col-xs-12 col-sm-7 col-md-9">
+                <h2 id="library">Virtual Soils Library</h2>
+                <p>A library of all publicly available Radiance Fields. This library includes fields that are not on the soil map.</p>
+                <span id="fieldsDraw"> If there are no fields listed, please enable JavaScript, or try another browser!</span>
+                <br>
+                
+            </div>
+        </div>
+    </div>
+    <footer class="container py-3 mb-5">
+        <div id="pageFooter">Loading...</div>
+        <script>unifyFooter("pageFooter")</script>
+    </footer>
+
+    <!-- Defines the Script -->
+    <script>
+        let htmlDraw = "";
+        let soilsMap = [];
+                
+        function parseParameter(listKeys, questionKeys) {
+            if(questionKeys.every(x => listKeys.includes(x) )){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function jsDivStart(){return dataWorking += "<div class='pd-md'>";}
+        function jsDivEnd(){return dataWorking += "</div>";}
+        function jsPar(text){return dataWorking += "<p>"+text+"</p>";}
+        function jsParComplex(text){
+            x = "<p>";
+            for (var i=0; i<text.length; i++){
+                x += text[i] + "<br>";
+            }
+            x += "</p>";
+            return dataWorking += x;
+        }
+
+        function updateSoilsWeb(sourceDatabase, htmlDrawTarget){           
+            for (var index=0; index<sourceDatabase.length; index++) {
+                let tempData = sourceDatabase[index];
+                let tempKeys = Object.getOwnPropertyNames(tempData);
+
+                console.log(index);
+                console.log(tempData)
+                console.log(tempKeys)
+
+                if (parseParameter(tempKeys,["name","path"])){
+                    console.log("Starting on: " + tempData.name)
+                    dataWorking = "" // Empties "dataWorking" to use it as a placeholder for content that goes on the map, and on the main webpage.
+                    htmlDraw += "<details><summary>" + tempData.name + "</summary>";
+
+                    // Adds Viewer Links
+                    jsDivStart();
+                    //if (parseParameter(tempKeys,["splatHR"])){dataWorking += "<a class='btn btn-sec-hov' href='https://amywells.ca/Radiance-Fields/Viewer.html#"+tempData.fieldID+"'>Open in Viewer</a>"};
+                    //if (parseParameter(tempKeys,["splatHR"])){htmlDraw += "<a class='btn btn-sec-hov' href='/viewer/#"+tempData.fieldID+"?q=high'>High Resolution</a>"};
+                    // if (parseParameter(tempKeys,["splatLR"])){htmlDraw += "<a class='btn btn-sec-hov' href='/viewer/#"+tempData.fieldID+"?q=low'>Low Resolution</a>"};
+                    if (parseParameter(tempKeys,["splatHR"])){htmlDraw += "<a class='btn btn-sec-hov' href='/viewer/#"+tempData.fieldID+"'>Open in Viewer</a>"};
+                    jsDivEnd();
+
+                    // Adds Thumbnail
+                    // Needs added functionality to be able to click on the image to open the larger version of the thumbnail
+                    if (parseParameter(tempKeys,["thumbnailLR"])){dataWorking += "<div><figure class='fig-sm fr'><img src='../cdn/radiance-fields/"+tempData.path+"/"+tempData.thumbnailLR+"'><figcaption>"+tempData.thumbnailAlt+"</figcaption></figure></div>"}
+
+                    // Location Information (Where in the world, and coordinates)
+                    jsPar("<b>Located:</b> "+tempData.locationName+" | "+tempData.country+", "+tempData.province);
+                    if (parseParameter(tempKeys,["lat","long"])){jsPar("<b>Coordinates:</b> "+"<a href='https://www.google.ca/maps/place/"+tempData.lat+","+tempData.long+"''target='_blank'>"+tempData.lat+", "+tempData.long+"</a>")}
+
+                    // Adds the description of the site
+                    jsPar(tempData.description);
+
+                    // Adds soil Information
+                    if (parseParameter(tempKeys,["soilProperties"])){
+                        n = tempData.soilProperties;
+                        nKeys = Object.getOwnPropertyNames(n);
+                        
+                        dataWorking += "<details><summary>Soil Properties Data</summary>";
+                        
+                        // Soil Classification Information
+                        if (parseParameter(nKeys,["order","group","subGroup"])){jsPar("<b>"+n.order+" "+n.group+" "+n.series+"</b>")};
+                        if (parseParameter(nKeys,["order"])){jsPar("<b>Soil Order: </b>"+n.order)};
+                        if (parseParameter(nKeys,["group"])){jsPar("<b>Great Group: </b>"+n.group)};
+                        if (parseParameter(nKeys,["subGroup"])){jsPar("<b>Sub Group: </b>"+n.subGroup)};
+                        if (parseParameter(nKeys,["series"])){jsPar("<b>Soil Order: </b>"+n.series)};
+                        
+                        // Soil Horizons Data
+                        // Potential idea:
+                        // - Have data stored by soil horizon or by depth in soil profile
+                        // - Add available data to the table one row at a time
+                        // - Only include columns with data
+                        // - Store data in a .json file -->  How to make json file? How to parse different formats of data?
+
+                        dataWorking += "</details>";
+                    }
+
+                    if (parseParameter(tempKeys,["metadata"])){
+                        n = tempData.metadata;
+                        nKeys = Object.getOwnPropertyNames(n);
+
+                        dataWorking  += "<details><summary>Capture Metadata</summary>";
+
+                        // Capture Information
+                        if (parseParameter(nKeys,["capturedBy"])){jsPar("<b>Captured By: </b>"+n.capturedBy)};
+                        if (parseParameter(nKeys,["captureDate"])){jsPar("<b>Captured On: </b>"+n.captureDate)};
+                        if (parseParameter(nKeys,["captureDevice"])){jsPar("<b>Capture Device: </b>"+n.captureDevice)};
+                        if (parseParameter(nKeys,["captureFormamt"])){jsPar("<b>Capture Format: </b>"+n.captureFormat)};
+                        
+                        // Colour Correction
+                        if (parseParameter(nKeys,["colourCorrection"])){jsPar("<b>Colour Corrected? </b>"+n.colourCorrection)};
+                        if (parseParameter(nKeys,["colourCorrectionMethod"])){jsPar("<b>Colour Correction Method: </b>"+n.colourCorrectionMethod)};
+
+                        // Processing Information
+                        if (parseParameter(nKeys,["processedBy"])){jsPar("<b>Processed By: </b>"+n.processedBy)};
+                        if (parseParameter(nKeys,["framesIn"])){jsPar("<b>Frames In: </b>"+n.framesIn)};
+                        if (parseParameter(nKeys,["framesTracked"])){jsPar("<b>Frames Tracked: </b>"+n.framesTracked)};
+                        if (parseParameter(nKeys,["framesIn","framesTracked"])){jsPar("<b>Alignment Success: </b>"+((n.framesTracked/n.framesIn)*100)+"%")};
+                        if (parseParameter(nKeys,["softwareEditor"])){jsPar("<b>Editing Software: </b>"+n.softwareEditor)};
+                        if (parseParameter(nKeys,["softwareTracker"])){jsPar("<b>Tracking Software: </b>"+n.softwareTracker)};
+                        if (parseParameter(nKeys,["softwareGeneration"])){jsPar("<b>Model Generator: </b>"+n.softwareGeneration)};
+                        
+                        dataWorking += "</details>";
+                    }
+
+                    
+                    htmlDraw += dataWorking;
+                    htmlDraw += "</details>";
+                    
+                    console.log(dataWorking);
+                    console.log(htmlDraw);
+
+                    if (parseParameter(tempKeys,["name","lat","long"])) {
+                        soilsMap.push([{lat: tempData.lat, lng:tempData.long}, tempData.name, tempData.fieldID, dataWorking]);
+                        console.log(soilsMap);
+                    }
+                    
+                }
+            }
+            document.getElementById(htmlDrawTarget).innerHTML = htmlDraw;
+        }
+
+        async function loadJsonData() {
+            try {
+                const response = await fetch('../cdn/radiance-fields/completeDatabase.json'); // Path to your JSON file
+                let data = await response.json(); // Parses the JSON response
+                console.log("Loaded Database")
+                updateSoilsWeb(data,"fieldsDraw");
+                return data;
+            } catch (error) {
+                console.error('Error loading JSON:', error);
+            }
+        }
+
+        loadJsonData()
+
+
+    </script>
+
+    <script>
+        /*
+        for (var index=0; index<database.length; index++) {
+            let temp = database[index];
+            let tempKeys = Object.getOwnPropertyNames(temp);
+
+            if (["Name","File"].every(x => tempKeys.includes(x))){
+                tempSoils = ""
+               
+                htmlDraw += "<details><summary>" + temp.Name + "</summary>";
+
+                tempSoils += "<div style='padding: 0 0.5rem 0 0.5rem;'><a class='btn btn-sec-hov' style='width:fit;' target='_blank' href='../Radiance-Fields/Viewer.html#"+temp.FieldID;
+                
+                // Future element to
+                if (tempKeys.includes("DefaultAnimation")) {
+                    htmlDraw += ":" + temp.DefaultMatrix;
+                } else {
+                    htmlDraw += ":[0.68,0.17,-0.71,0,0.03,0.96,0.25,0,0.74,-0.2,0.66,0,-0.16,0.21,3.75,1]"
+                }
+                
+                    
+                tempSoils += "'> Open in Viewer</a></div>";
+            
+                if (tempKeys.includes("Thumbnail")) { // Writes the location name to the subDraw string
+                    tempSoils += "<div style='padding: 0.5rem; float:right;''><img class='radiance-thumbnail' style='max-width:256px;' src='../Radiance-Fields/Thumbnails/"+temp.Thumbnail+"'";
+                    if (tempKeys.includes("ThumbnailAlt")) {
+                        tempSoils += "alt='" + temp.ThumbnailAlt + "' title='" + temp.ThumbnailAlt + "'";
+                    }
+                    tempSoils += "></div>";
+                }                
+
+                // Location Information
+                subDraw = "<p>"; // Resets the temp-draw
+                if (tempKeys.includes("LocationName")) { // Writes the location name to the subDraw string
+                    subDraw += "<b>Location:</b> " + temp.LocationName;
+                }
+                if (["LocationName","Latitude","Longitude"].every(x => tempKeys.includes(x))) { // Adds a vertical bar between the location name and coordinates if there are both
+                    subDraw += " | ";
+                }
+                if (["Latitude","Longitude"].every(x => tempKeys.includes(x))) { // Writes the coordinates with a google maps link to the subDraw string
+                    subDraw += "<b>Coordinates: </b><a href='https://www.google.ca/maps/place/" + temp.Latitude +"," + temp.Longitude + "'' target='_blank'>" + temp.Latitude + ", " + temp.Longitude + "</a>";
+                }
+                if (!(subDraw == "<p>")) { // Clears the subDraw string if it was used to write any location information
+                    subDraw += "</p>";
+                    tempSoils += subDraw;
+                    subDraw = "<p>";
+                }
+                
+                // Site Description                
+                if(tempKeys.includes('Description')) {
+                    tempSoils += "<p><b>Site Description:</b> " + temp.Description + "</p>";
+                }
+
+                // Soil 
+                if(tempKeys.includes("SoilProperties")){
+                    subTemp = temp.SoilProperties;
+                    subTempKeys = Object.getOwnPropertyNames(subTemp);
+                    tempSoils += "<details style='font-size: small;'><summary> The Soil of " + temp.Name + "</summary>";
+                    tempSoils += "<div style='margin:1rem;''>";
+                    subDraw = "<p>";
+
+                    // Soil Order, Group, and Sub Group
+                    if (["Order","Group","SubGroup"].every(y => subTempKeys.includes(y))){
+                        subDraw += "<b>" + subTemp.Group + " " + subTemp.SubGroup + " " + subTemp.Order + "</b><br>"
+                    }   
+
+                    if (subTempKeys.includes("Order")) { 
+                        subDraw += "<b>Soil Order:</b> " + subTemp.Order + "<br>";
+                    }
+                    if (subTempKeys.includes("Group")) { 
+                        subDraw += "<b>Soil Group:</b> " + subTemp.Group + "<br>";
+                    }
+                    if (subTempKeys.includes("SubGroup")) { 
+                        subDraw += "<b>Soil Sub Group:</b> " + subTemp.SubGroup + "<br>";
+                    }
+
+                    // Exact soil series
+                    if (subTempKeys.includes("Series")) { 
+                        subDraw += "<b>Soil Series:</b> " + subTemp.Series + "<br>";
+                    }
+
+                    if (!(subDraw == "<p>")) { // Clears the subDraw string if it was used to write any location information
+                        subDraw += "</p>";
+                        tempSoils += subDraw;
+                        subDraw = "<p>";
+                    }
+                    if (subTempKeys.includes("Horizons")) {
+                        tempSoils += "<p><b>Soil Horizons</b><ul>"
+                        for (var horizon=0; horizon<subTemp.Horizons.length; horizon++) {
+                            tempSoils += "<li>" + subTemp.Horizons[horizon]; + "</li>";
+                        }
+                        tempSoils += "</ul></p>";
+                    }
+                    tempSoils += "</div>";
+                    tempSoils += "</details>";
+                }
+
+                // Metadata
+                if(tempKeys.includes("Metadata")){
+                    subTemp = temp.Metadata;
+                    subTempKeys = Object.getOwnPropertyNames(subTemp);
+                    tempSoils += "<details style='font-size: small;'><summary>Metadata</summary>"
+                    tempSoils += "<div style='margin:1rem;''>";
+                    tempSoils += "<p><ul>"
+                    
+                    // Capture Information
+                    if (subTempKeys.includes("CapturedBy")) { 
+                        subDraw += "<li><b>Captured By:</b> " + subTemp.CapturedBy + "</li>";
+                    }
+                    if (subTempKeys.includes("CaptureDate")) { 
+                        subDraw += "<li><b>Captured On:</b> " + subTemp.CaptureDate + "</li>";
+                    }
+                    if (subTempKeys.includes("CaptureDevice")) { 
+                        subDraw += "<li><b>Captured With:</b> " + subTemp.CaptureDevice + "</li>";
+                    }
+                    if (subTempKeys.includes("CaptureFormat")) { 
+                        subDraw += "<li><b>Capture Format:</b> " + subTemp.CaptureFormat + "</li>";
+                    }
+                    if (subTempKeys.includes("ColourCorection")) { 
+                        subDraw += "<li><b>Colour Corrected:</b> " + subTemp.ColourCorection + "</li>";
+                    }
+                    
+                    // Processing Information
+                    if (subTempKeys.includes("ProcessedBy")) { 
+                        subDraw += "<li><b>Processed By:</b> " + subTemp.ProcessedBy + "</li>";
+                    }
+                    if (subTempKeys.includes("FramesIn")) { 
+                        subDraw += "<li><b>Captured Frames:</b> " + subTemp.FramesIn + "</li>";
+                    }
+                    if (subTempKeys.includes("FramesTracked")) { 
+                        subDraw += "<li><b>Tracked Frames:</b> " + subTemp.FramesTracked + "</li>";
+                    }
+                    if (subTempKeys.includes("SoftwareEditor")) { 
+                        subDraw += "<li><b>Frames Edited In:</b> " + subTemp.SoftwareEditor + "</li>";
+                    }
+                    if (subTempKeys.includes("SoftwareTracker")) { 
+                        subDraw += "<li><b>Frames Tracked In:</b> " + subTemp.SoftwareTracker + "</li>";
+                    }
+                    if (subTempKeys.includes("ModelType")) { 
+                        subDraw += "<li><b>Model Type:</b> " + subTemp.ModelType + "</li>";
+                    }
+
+
+                    if (!(subDraw == "<p>")) { // Clears the subDraw string if it was used to write any metadata
+                        subDraw += "</p>";
+                        tempSoils += subDraw;
+                        subDraw = "<p>";
+                    }
+                    
+                    tempSoils += "</ul></p>";
+                    tempSoils += "</div>";
+                    htmlDraw += tempSoils + "</details>";
+
+                    if (["Name","Latitude","Longitude"].every(y => tempKeys.includes(y))){
+                        
+                        soilsMap.push([{ lat: temp.Latitude, lng: temp.Longitude },temp.Name, temp.FieldID, tempSoils]);
+                        console.log(soilsMap);
+
+                    }
+
+                }
+                
+                htmlDraw += "</details>";
+            }
+        }
+        document.getElementById("fieldsDraw").innerHTML = htmlDraw;
+        */
+
+    </script>
+    
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: "AIzaSyBvCw6PR-4Wre18vGecnkoBqB5WthwVHMo",
+            v: "weekly",
+            // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+            // Add other bootstrap parameters as needed, using camel case.
+        });
+    </script>
+    
+    <script>
+
+        let map;
+
+        async function initMap() {
+
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 12,
+            center: { lat: 49.253251, lng: -123.241680 },
+
+            zoomControl: true,
+            cameraControl: true,
+            mapTypeControl: true,
+            scaleControl: true,
+            streetViewControl: false,
+            rotateControl: true,
+            fullscreenControl: true,
+
+            mapTypeId: 'terrain'
+
+        });
+
+        // Create an info window to share between markers.
+        const infoWindow = new google.maps.InfoWindow();
+
+        // Create the markers.
+        soilsMap.forEach(([position, title, fieldID, description], i) => {
+            const marker = new google.maps.Marker({
+            position,
+            map,
+            title: `${title}`,
+            label: `${fieldID}`,
+            optimized: false,
+            });
+
+            // Add a click listener for each marker, and set up the info window.
+            marker.addListener("click", () => {
+                infoWindow.close();
+                infoWindow.setContent(
+                    `<h3>` + marker.getTitle() + `</h3>`
+                    + soilsMap[i][3]
+                );
+                
+                infoWindow.open(marker.getMap(), marker);
+            });
+        });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Virtual Soils</title>
+    <link rel="canonical" href="https://virtualsoils.ca/contributors/">
+    <meta property="og:url" content="https://virtualsoils.ca/contributors/">
+    <script>
+        (function() {
+
+            // JavaScript snippet handling Dark/Light mode switching
+
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+
+                if (forcedTheme) return forcedTheme;
+
+                const storedTheme = getStoredTheme();
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+
+                if (pageTheme) {
+                    return pageTheme;
+                }
+
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+
+                if (!themeSwitchers.length) return;
+
+                document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                    element.setAttribute('aria-pressed', 'false');
+                });
+
+                const iconTheme = theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
+
+                for (const themeSwitcher of themeSwitchers) {
+
+                    const adaptIcon = !!themeSwitcher.dataset.bsAdaptIcon;
+
+                    if (adaptIcon) {
+                        const btnIcon = themeSwitcher.querySelector('[data-bss-adaptable]');
+
+                        try {
+                            const themeIcons = JSON.parse(themeSwitcher.dataset.bssIcons || "{}");
+                            const newIconMarkup = themeIcons[iconTheme];
+
+                            const template = document.createElement("template");
+                            template.innerHTML = newIconMarkup;
+
+                            const newIconFragment = template.content.cloneNode(true);
+
+                            if (newIconFragment?.children?.length) {
+                                newIconFragment.children[0].dataset.bssAdaptable = true;
+                            }
+
+                            btnIcon.replaceWith(newIconFragment);
+                        } catch (e) {}
+                    }
+
+                    const btnToActivate = themeSwitcher.querySelector('[data-bs-theme-value="' + theme + '"]');
+
+                    if (btnToActivate) {
+                        btnToActivate.classList.add('active');
+                        btnToActivate.setAttribute('aria-pressed', 'true');
+                    }
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const theme = toggle.getAttribute('data-bs-theme-value');
+                            setStoredTheme(theme);
+                            setTheme(theme);
+                            showActiveTheme(theme);
+                        })
+                    })
+            });
+        })();
+    </script>
+    <link rel="icon" type="image/jpeg" sizes="256x256" href="/assets/img/virtual-soils.jpg">
+    <link rel="icon" type="image/jpeg" sizes="256x256" href="/assets/img/virtual-soils.jpg" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/jpeg" sizes="256x256" href="/assets/img/virtual-soils.jpg">
+    <link rel="icon" type="image/jpeg" sizes="256x256" href="/assets/img/virtual-soils.jpg" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&amp;display=swap">
+    <link rel="stylesheet" href="/assets/css/bss-overrides.css">
+    <link rel="stylesheet" href="/assets/css/Navbar-Right-Links-Dark-icons.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+
+<body class="d-flex flex-column" style="min-height: 100vh;">
+    <nav class="navbar navbar-expand-md mb-0 py-3" data-bs-theme="dark" style="background: linear-gradient(30deg, var(--bs-primary), var(--bs-tertiary-bg));">
+        <div class="container-xl"><a class="navbar-brand d-flex align-items-center" href="/"><span class="bs-icon-sm d-flex justify-content-center align-items-center me-2 bs-icon"><img class="img-fluid p-1" width="71" height="77" src="/assets/img/triskellion_white.svg"></span><span>The Virtual Soils Project</span></a><button class="navbar-toggler px-1" data-bs-toggle="collapse" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-5">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link link-light" href="/explore/">Explore</a></li>
+                    <li class="nav-item">
+                        <div class="d-flex align-items-center"><a class="link-light pe-0 nav-link" href="/about/">About</a></div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link link-light" href="/contributors/">Contributors</a></li>
+                    <li class="nav-item"></li>
+                </ul>
+                <div class="theme-switcher dropdown" data-bs-adapt-icon="true" data-bss-icons="{&quot;light&quot;:&quot;<svg xmlns=\&quot;http://www.w3.org/2000/svg\&quot; width=\&quot;1em\&quot; height=\&quot;1em\&quot; fill=\&quot;currentColor\&quot; class=\&quot;bi bi-sun-fill\&quot; viewBox=\&quot;0 0 16 16\&quot;>\n  <path d=\&quot;M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708\&quot;/>\n</svg>&quot;,&quot;dark&quot;:&quot;<svg xmlns=\&quot;http://www.w3.org/2000/svg\&quot; width=\&quot;1em\&quot; height=\&quot;1em\&quot; fill=\&quot;currentColor\&quot; class=\&quot;bi bi-moon-stars-fill\&quot; viewBox=\&quot;0 0 16 16\&quot;>\n  <path d=\&quot;M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278\&quot;/>\n  <path d=\&quot;M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z\&quot;/>\n</svg>&quot;}"><a class="dropdown-toggle link-light" data-bs-toggle="dropdown" aria-expanded="false" href="#"><svg class="bi bi-sun-fill mb-1" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" data-bss-adaptable="true">
+                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"></path>
+                        </svg></a>
+                    <div class="dropdown-menu" style="transform: translate(-125px);"><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="light"><svg class="bi bi-sun-fill me-2 opacity-50" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"></path>
+                            </svg>Light</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="dark"><svg class="bi bi-moon-stars-fill me-2 opacity-50" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"></path>
+                                <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"></path>
+                            </svg>Dark</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="auto"><svg class="bi bi-circle-half me-2 opacity-50" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"></path>
+                            </svg>Auto</a></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section>
+        <div data-bss-parallax-bg="true" style="height: 200px;background: url(&quot;/assets/img/3d-gaussian-splats_high.jpg&quot;) center / cover;">
+            <div class="container h-100">
+                <div class="row h-100">
+                    <div class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-md-start align-items-md-center justify-content-xl-center">
+                        <div class="rounded p-2" style="max-width: 350px;background: rgba(41,43,47,0.5);transform: perspective(0px);">
+                            <h1 class="text-uppercase fw-bold text-light m-2 p-0">project contributors</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="flex-grow-1 mt-2">
+        <div class="container py-4 py-xl-5">
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2>Core Research Team</h2>
+                </div>
+            </div>
+            <div class="row gy-4 row-cols-2 row-cols-md-2 row-cols-lg-3 justify-content-center">
+                <div class="col">
+                    <div class="card border-0 shadow-none">
+                        <div class="card-body d-flex align-items-center p-0"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="130" height="130" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <h5 class="fw-bold text-primary mb-0">Amy Wells</h5>
+                                <p class="text-muted mb-1">Lead Researcher</p>
+                                <p class="fst-italic text-secondary mb-1">University of British Columbia</p>
+                                <ul class="list-inline fs-6 text-muted w-100 mb-0">
+                                    <li class="list-inline-item text-center">
+                                        <div class="d-flex flex-column align-items-center"><svg class="bi bi-instagram" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"></path>
+                                            </svg></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-none">
+                        <div class="card-body d-flex align-items-center p-0"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="130" height="130" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <h5 class="fw-bold text-primary mb-0"><strong>Dr. Maja Krzic</strong></h5>
+                                <p class="text-muted mb-1">Project Supervisor</p>
+                                <p class="fst-italic text-secondary mb-1">University of British Columbia</p>
+                                <ul class="list-inline fs-6 text-muted w-100 mb-0">
+                                    <li class="list-inline-item text-center"><a href="https://scholar.google.com/citations?user=-MBxxyoAAAAJ">
+                                            <div class="d-flex flex-column align-items-center"><svg class="bi bi-mortarboard" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917zM8 8.46 1.758 5.965 8 3.052l6.242 2.913z"></path>
+                                                    <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46z"></path>
+                                                </svg></div>
+                                        </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-none">
+                        <div class="card-body d-flex align-items-center p-0"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="130" height="130" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <h5 class="fw-bold text-primary mb-0"><strong>Dr. Jean-Thomas Cornelis</strong></h5>
+                                <p class="text-muted mb-1">Project Supervisor</p>
+                                <p class="fst-italic text-secondary mb-1">University of British Columbia</p>
+                                <ul class="list-inline fs-6 text-muted w-100 mb-0">
+                                    <li class="list-inline-item text-center"><a href="https://scholar.google.com/citations?user=IuWeIQcAAAAJ&amp;hl=fr">
+                                            <div class="d-flex flex-column align-items-center"><svg class="bi bi-mortarboard" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917zM8 8.46 1.758 5.965 8 3.052l6.242 2.913z"></path>
+                                                    <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46z"></path>
+                                                </svg></div>
+                                        </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>The Emerging Media Lab (EML) at the University of British Columbia (UBC)</h2>
+                    <p>The Emerging Media Lab innovated upon existing 3D-Gaussian splat viewers to add support for markers that can engage students as part of exploring the Virtual Soils models.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0"><strong>Saeed Dyanatkar</strong></p>
+                            <p class="text-muted mb-0">Senior Manager</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Maryann Kempthorn</p>
+                            <p class="text-muted mb-0">lab Supervisor</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Dante Cerron</p>
+                            <p class="text-muted mb-0">Emerging Tech Developer</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Avni Kant</p>
+                            <p class="text-muted mb-0">Lab Coordinator</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Riddhima Gupta</p>
+                            <p class="text-muted mb-0">EML Project Lead (Winter 2025)</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Name</p>
+                            <p class="text-muted mb-0">EML Project Lead (Summer 2026)</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Amy Yiqin Li</p>
+                            <p class="text-muted mb-0">UI/UX Designer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Kieran Crichton-Stewart</p>
+                            <p class="text-muted mb-0">Developer</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Kai Zhang</p>
+                            <p class="text-muted mb-0">Developer</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">Kushi Narang</p>
+                            <p class="text-muted mb-0">Developer</p>
+                        </div>
+                    </div>
+                    <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                        <div>
+                            <p class="fw-bold mb-0">James Edralin</p>
+                            <p class="text-muted mb-0">Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container py-4 py-xl-5">
+            <div class="row mb-4">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2>Other Development Partners</h2>
+                    <p></p>
+                </div>
+            </div>
+            <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
+                <div class="col">
+                    <div class="p-4">
+                        <h4>Studios at The University of British Columbia</h4>
+                        <p>UBC Studios...</p>
+                        <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <p class="fw-bold mb-0">Saeed Dyanatkar</p>
+                                <p class="text-muted mb-0">Executive Producer</p>
+                            </div>
+                        </div>
+                        <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <p class="fw-bold mb-0">Michael Sider</p>
+                                <p class="text-muted mb-0">Producer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-4">
+                        <h4>Nucleus4D</h4>
+                        <p>Nucleus4D...</p>
+                        <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <p class="fw-bold mb-0">Navjeet Chhina</p>
+                                <p class="text-muted mb-0">Founder</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container py-4 py-xl-5">
+            <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
+                <div class="col">
+                    <div class="p-4">
+                        <h4>The Sts'ailes First Nation</h4>
+                        <p>One virtual soils model was captured in collaboration with the Sts'ailes First Nation for use in soil science education and communication.</p>
+                        <ul>
+                            <li>Philips Arm Forest Garden in Sts'ailes First Nation Territory</li>
+                        </ul>
+                        <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <p class="fw-bold mb-0"><strong>Dr. Morgan Ritchie</strong></p>
+                                <p class="text-muted mb-0"><em>Heritage Research Archaeologist</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-4">
+                        <h4>The Kwiakah First Nation</h4>
+                        <p>Three virtual soils models will be captured as part of research being done in collaboration with the Kwiakah First Nation on their soils, and the history of their landscapes.</p>
+                        <ul>
+                            <li>Forest Garden in Kwiakah First Nation Territory</li>
+                            <li>Periphery Forest in Kwiakah First Nation Territory</li>
+                            <li>Cut block in Kwiakah First Nation Territory</li>
+                        </ul>
+                        <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <p class="fw-bold mb-0">&lt;placeholder&gt;</p>
+                                <p class="text-muted mb-0">&lt;placeholder&gt;</p>
+                            </div>
+                        </div>
+                        <div class="d-flex"><img class="object-fit-cover rounded-circle flex-shrink-0 me-3" width="50" height="50" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png">
+                            <div>
+                                <p class="fw-bold mb-0">Gavin Woodburn</p>
+                                <p class="text-muted mb-0">Kwiakah Field Liaison</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="text-center bg-body" data-bs-theme="dark" style="background: linear-gradient(120deg, var(--bs-secondary-bg), var(--bs-tertiary-bg));">
+        <div class="modal fade" role="dialog" tabindex="-1" id="license">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Licenses of Virtual Soils</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Photos</h5>
+                        <p>Unless stated otherwise, the photos on this website are licensed from Amy Wells under a CC BY-SA 4.0 License.</p>
+                        <h5>Code</h5>
+                        <p>The code developed for this website is available on the GitHub repository under an MIT License.&nbsp;</p>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-primary btn-sm" type="button" data-bs-dismiss="modal">Close</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="container pt-2 pb-2">
+            <ul class="list-inline">
+                <li class="list-inline-item me-4"><a class="link-body-emphasis" href="https://www.soilweb.ca/">SoilWeb</a></li>
+                <li class="list-inline-item me-4"><a class="link-body-emphasis">Code</a></li>
+            </ul>
+            <ul class="list-inline">
+                <li class="list-inline-item me-4"><a href="https://github.com/GWBabycat/virtualsoils/settings"><svg class="bi bi-github text-body" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"></path>
+                        </svg></a></li>
+                <li class="list-inline-item"><a href="https://www.instagram.com/amywells_ca/"><svg class="bi bi-instagram text-body" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"></path>
+                        </svg></a></li>
+            </ul>
+            <p class="text-body mb-0">Copyright © 2026 Amy Wells</p>
+        </div>
+    </footer>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bs-init.js"></script>
+</body>
+
+</html>

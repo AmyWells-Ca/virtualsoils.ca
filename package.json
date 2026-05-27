@@ -1,0 +1,40 @@
+{
+  "name": "virtualsoils.ca",
+  "version": "0.1.0",
+  "description": "A document outlining the website functionality and structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+
+    "server":"start \"Simple HTTPS Server\" cmd /c server.bat release",
+    "server-dev":"start \"Simple HTTPS Server\" cmd /c server.bat dev",
+
+    "build":"npm run clear && npm run copy && npm run optimize",
+    "build-dev":"npm run clear-dev && npm run copy-dev && npm run optimize-dev",
+
+    "clear":"if exist \".\\build\\release\" rmdir /s /q .\\build\\release\\",
+    "copy":"xcopy /E /Y /exclude:exclude.txt .\\src build\\release\\",
+    "optimize":"echo \"Imagine that it got optimized\"",
+    
+    "clear-dev":"if exist \".\\build\\dev\" rmdir /s /q .\\build\\dev\\",
+    "copy-dev":"xcopy /E /Y /exclude:exclude.txt .\\src build\\dev\\",
+    "optimize-dev":"echo \"Imagine that it got optimized\"",
+
+    "compressHTML":"html-minifier-terser --input-dir .\\build\\release --output-dir .\\build\\release --collapse-whitespace --preserve-line-breaks --remove-comments --minify-js --minify-css"
+  },
+  "devDependencies": {
+    "html-minifier-terser": "^7.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GWBabycat/virtualsoils"
+  },
+  "keywords": [],
+  "author": "Amy Wells",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GWBabycat/virtualsoils/issues"
+  },
+  "homepage": "https://github.com/GWBabycat/virtualsoils#readme"
+}
