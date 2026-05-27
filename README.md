@@ -17,5 +17,14 @@ The viewer is built upon...
 **Amy Wells**  
 Email: amy.wells@virtualsoils.ca
 
-## Project License
-This project is built upon a number of MIT License open-source projects.
+## Project Licenses
+### Boostrap ([MIT License](https://github.com/twbs/bootstrap/blob/main/LICENSE))
+_/src/assets/boostrap_
+
+Code derivied from Boostrap is licensed for this project under an MIT License
+
+### Viewer (MIT LICENSE)
+_/src/explore/..._
+
+### Website Photographs
+Unless otherwise stated, photographs are licensed from Amy Wells under a CC BY-SA 4.0 license.
