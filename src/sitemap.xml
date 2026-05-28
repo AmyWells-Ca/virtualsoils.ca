@@ -10,7 +10,10 @@
         <loc>https://virtualsoils.ca/explore/</loc>
     </url>
     <url>
-        <loc>https://virtualsoils.ca/explore/index-1.html</loc>
+        <loc>https://virtualsoils.ca/explore/index_custom.local.html</loc>
+    </url>
+    <url>
+        <loc>https://virtualsoils.ca/explore/index_tabs.local.html</loc>
     </url>
     <url>
         <loc>https://virtualsoils.ca/</loc>

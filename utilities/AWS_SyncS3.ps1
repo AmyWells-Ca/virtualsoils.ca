@@ -83,10 +83,10 @@ if ($no -contains$answ) {
     Write-Host "Preparing to Build $domain"
     
     Write-Host "Updating virtualsoils" -ForegroundColor Yellow
-    # Write-Host ""
-    # aws s3 sync ".\..\build\dev" s3://dev.virtualsoils.ca/ --delete 
     Write-Host ""
-    aws s3 sync ".\..\build\release" s3://virtualsoils.ca/ --delete 
+    aws s3 sync ".\..\build\dev" s3://dev.virtualsoils.ca/ --delete 
+    # Write-Host ""
+    # aws s3 sync ".\..\build\release" s3://virtualsoils.ca/ --delete 
     Write-Host ""
     Read-host -prompt "Uploads Completed!"
     [Console]::ReadKey($true) | Out-Null
